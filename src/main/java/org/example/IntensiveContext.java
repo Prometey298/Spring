@@ -15,7 +15,7 @@ public class IntensiveContext {
      *
      * @param packageName имя пакета для сканирования компонентов
      */
-    public IntensiveContext(String packageName) {
+    protected IntensiveContext(String packageName) {
         this.packageName = packageName;
     }
 
