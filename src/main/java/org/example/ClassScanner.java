@@ -2,11 +2,19 @@ package org.example;
 
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
+
+/**
+ * Утилита для сканирования классов в заданном пакете.
+ */
 public class ClassScanner {
 
+    /**
+     * Сканирует указанный пакет и применяет заданный потребитель к найденным классам.
+     *
+     * @param packageName имя пакета для сканирования
+     * @param consumer потребитель, который будет применяться к найденным классам
+     */
     public static void scanPackage(String packageName, ClassConsumer consumer) {
         String path = packageName.replace('.', '/');
         try {
@@ -28,6 +36,9 @@ public class ClassScanner {
         }
     }
 
+    /**
+     * Функциональный интерфейс для обработки классов.
+     */
     @FunctionalInterface
     public interface ClassConsumer {
         void accept(Class<?> cls);

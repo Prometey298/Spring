@@ -1,5 +1,8 @@
 package org.example;
 
+/**
+ * Основной класс приложения, который запускает программу.
+ */
 public class Main {
     public static void main(String[] args) {
         IntensiveContext context = new IntensiveContext("org.example");

@@ -3,14 +3,29 @@ package org.example;
 import java.lang.reflect.*;
 import java.util.*;
 
+/**
+ * Контекст для управления зависимостями и инстанцированием классов.
+ */
 public class IntensiveContext {
     private final Map<Class<?>, Object> instances = new HashMap<>();
     private final String packageName;
 
+    /**
+     * Конструктор, инициализирующий контекст с указанным именем пакета.
+     *
+     * @param packageName имя пакета для сканирования компонентов
+     */
     public IntensiveContext(String packageName) {
         this.packageName = packageName;
     }
 
+    /**
+     * Получает объект указанного типа из контекста.
+     *
+     * @param type класс типа объекта, который нужно получить
+     * @param <T> тип объекта
+     * @return экземпляр объекта указанного типа
+     */
     public <T> T getObject(Class<T> type) {
         if (!instances.containsKey(type)) {
             List<Class<?>> implementations = findImplementations(type);
@@ -28,6 +43,12 @@ public class IntensiveContext {
         return (T) instances.get(type);
     }
 
+    /**
+     * Находит реализации указанного типа в заданном пакете.
+     *
+     * @param type класс интерфейса для поиска реализаций
+     * @return список классов, реализующих указанный интерфейс
+     */
     private List<Class<?>> findImplementations(Class<?> type) {
         List<Class<?>> implementations = new ArrayList<>();
         ClassScanner.scanPackage(packageName, cls -> {
@@ -38,6 +59,12 @@ public class IntensiveContext {
         return implementations;
     }
 
+    /**
+     * Создает экземпляр указанного класса и выполняет инъекцию зависимостей.
+     *
+     * @param clazz класс для создания экземпляра
+     * @return созданный экземпляр объекта
+     */
     private Object createInstance(Class<?> clazz) {
         try {
             Object instance = clazz.getDeclaredConstructor().newInstance();
@@ -48,6 +75,11 @@ public class IntensiveContext {
         }
     }
 
+    /**
+     * Выполняет инъекцию зависимостей в указанный экземпляр.
+     *
+     * @param instance объект, в который нужно выполнить инъекцию зависимостей
+     */
     private void injectDependencies(Object instance) {
         for (Field field : instance.getClass().getDeclaredFields()) {
             if (field.isAnnotationPresent(IntensiveComponent.class)) {
